@@ -1,6 +1,13 @@
 import 'package:flutter/material.dart';
 
+///
+///A container component that displays data of a Todo object
+///
+///Extension of Flutter component [StatefulWidget] 
+///
+/// [_TodoContainerState] holds the front-end logic. 
 class TodoContainer extends StatefulWidget {
+  
   const TodoContainer ({super.key, required this.title});
 
   final String title;
@@ -15,7 +22,7 @@ class _TodoContainerState extends State<TodoContainer> {
     return LayoutBuilder(
       builder: (context, constraints) {
         return Padding(
-          padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
+          padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
           child: Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10.0),
@@ -30,7 +37,7 @@ class _TodoContainerState extends State<TodoContainer> {
                 padding: const EdgeInsets.all(10.0),
                 child: Text(
                   widget.title,
-                  style: TextStyle(color: Colors.white)
+                  style: const TextStyle(color: Colors.white)
                 ),
               ),
             )

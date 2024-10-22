@@ -14,32 +14,28 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    
-    return ChangeNotifierProvider(
-      create: (context) => MyAppState(),
-      child: MaterialApp(
-        title: 'Flutter Demo',
-        theme: ThemeData(
-          // This is the theme of your application.
-          //
-          // TRY THIS: Try running your application with "flutter run". You'll see
-          // the application has a purple toolbar. Then, without quitting the app,
-          // try changing the seedColor in the colorScheme below to Colors.green
-          // and then invoke "hot reload" (save your changes or press the "hot
-          // reload" button in a Flutter-supported IDE, or press "r" if you used
-          // the command line to start the app).
-          //
-          // Notice that the counter didn't reset back to zero; the application
-          // state is not lost during the reload. To reset the state, use hot
-          // restart instead.
-          //
-          // This works for code too, not just values: Most code changes can be
-          // tested with just a hot reload.
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-          useMaterial3: true,
-        ),
-        home: MyHomePage(title: 'Todo App'),
+    return MaterialApp(
+      title: 'Flutter Demo',
+      theme: ThemeData(
+        // This is the theme of your application.
+        //
+        // TRY THIS: Try running your application with "flutter run". You'll see
+        // the application has a purple toolbar. Then, without quitting the app,
+        // try changing the seedColor in the colorScheme below to Colors.green
+        // and then invoke "hot reload" (save your changes or press the "hot
+        // reload" button in a Flutter-supported IDE, or press "r" if you used
+        // the command line to start the app).
+        //
+        // Notice that the counter didn't reset back to zero; the application
+        // state is not lost during the reload. To reset the state, use hot
+        // restart instead.
+        //
+        // This works for code too, not just values: Most code changes can be
+        // tested with just a hot reload.
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        useMaterial3: true,
       ),
+      home: MyHomePage(title: 'Todo App'),
     );
   }
 }
@@ -67,7 +63,14 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
 
   late StreamSubscription streamSubscription;
-  final streamController = StreamController<TodoContainer>();
+  final streamController = StreamController<Widget>();
+
+  List<Widget> list = [];
+
+  void addTodoItem(String title) {
+    list.add(TodoContainer(title: title));
+    streamController.sink.add(list.);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -94,23 +97,25 @@ class _MyHomePageState extends State<MyHomePage> {
         // Center is a layout widget. It takes a single child and positions it
         // in the middle of the parent.
         child: 
-            StreamBuilder<TodoContainer>(
+            StreamBuilder<Widget>(
               stream: streamController.stream,
               builder: (context, state) {
                 if(!state.hasData){
                   return CircularProgressIndicator();
                 }
-                List<TodoContainer> list = state.data;
+                
+                List<Widget> listTodo = [];
+                listTodo.add(state.data!);
                 return ListView(
                   padding: const EdgeInsets.fromLTRB(40.0, 10, 40.0, 10),
-                  children: <TodoContainer>[state.data],
+                  children: listTodo,
                 );
               }
             )
         ),
   
       floatingActionButton: FloatingActionButton(
-        onPressed: () => {streamController.add(TodoContainer(title: "Todo test"))},
+        onPressed: () => {streamController.sink.add(TodoContainer(title: "Test test"))},
         tooltip: 'Add a note',
         backgroundColor: const Color.fromARGB(255, 52, 50, 50),
         foregroundColor: Colors.white,

@@ -1,7 +1,8 @@
 import 'dart:async';
 
+import 'package:executive_assistant/widgets/todo_notifier.dart';
 import 'package:flutter/material.dart';
-import 'package:executive_assistant/todo_container.dart';
+import 'package:executive_assistant/widgets/todo_container.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -14,31 +15,20 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a purple toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
+    return ChangeNotifierProvider(
+      create:(context) => TodoNotifier(),
+      child: MaterialApp(
+        title: 'Flutter Demo',
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+          useMaterial3: true,
+        ),
+        home: MyHomePage(title: 'Todo App'),
       ),
-      home: MyHomePage(title: 'Todo App'),
     );
   }
 }
+
 
 
 class MyHomePage extends StatefulWidget {
@@ -62,24 +52,14 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
 
-  late StreamSubscription streamSubscription;
-  final streamController = StreamController<Widget>();
 
-  List<Widget> list = [];
-
-  void addTodoItem(String title) {
-    list.add(TodoContainer(title: title));
-    streamController.sink.add(list.);
-  }
+  
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
+    var appState = context.watch<TodoNotifier>();
+    final tasks = appState.list;
+    
     
     return Scaffold(
       appBar: AppBar(
@@ -96,30 +76,40 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Center(
         // Center is a layout widget. It takes a single child and positions it
         // in the middle of the parent.
-        child: 
-            StreamBuilder<Widget>(
-              stream: streamController.stream,
-              builder: (context, state) {
-                if(!state.hasData){
-                  return CircularProgressIndicator();
-                }
-                
-                List<Widget> listTodo = [];
-                listTodo.add(state.data!);
-                return ListView(
-                  padding: const EdgeInsets.fromLTRB(40.0, 10, 40.0, 10),
-                  children: listTodo,
-                );
-              }
-            )
+        child: ListView.separated(
+          padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
+
+          itemCount: tasks.length,
+          itemBuilder: (context, index) {
+            final task = tasks[index];
+            return ListTile(
+              shape: RoundedRectangleBorder(
+                side: BorderSide(color: const Color.fromARGB(255, 102, 99, 99), width: 1),
+                borderRadius: BorderRadius.circular(5)
+              ),
+              contentPadding: EdgeInsets.fromLTRB(40, 0, 0, 0),
+              title: Text(task.title, style: TextStyle(color: Colors.white)),
+              tileColor: const Color.fromARGB(255, 97, 92, 92),
+            );          
+          },
+          separatorBuilder: (context, index) => SizedBox(
+            height: 10,
+          ),
+        ) 
         ),
   
       floatingActionButton: FloatingActionButton(
-        onPressed: () => {streamController.sink.add(TodoContainer(title: "Test test"))},
+        onPressed: () => {appState.addTodoItem("Test")},
         tooltip: 'Add a note',
-        backgroundColor: const Color.fromARGB(255, 52, 50, 50),
-        foregroundColor: Colors.white,
-        child: const Icon(Icons.note_add),
+        child: Container(
+          width: 60,
+          height: 60,
+          child: const Icon(Icons.note_add, color: Color.fromARGB(255, 255, 255, 255)),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12),
+            gradient: LinearGradient(colors: [const Color.fromARGB(255, 24, 18, 18), const Color.fromARGB(255, 36, 30, 30), Color.fromARGB(255, 0, 0, 0), const Color.fromARGB(255, 93, 44, 23), Colors.red])
+          ),
+        ),
         
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );

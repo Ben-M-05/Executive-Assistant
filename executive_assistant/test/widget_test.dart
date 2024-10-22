@@ -5,7 +5,7 @@
 // gestures. You can also use WidgetTester to find child widgets in the widget
 // tree, read text, and verify that the values of widget properties are correct.
 
-import 'package:executive_assistant/todo_container.dart';
+import 'package:executive_assistant/widgets/todo_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -14,10 +14,15 @@ import 'package:executive_assistant/main.dart';
 void main() {
   ///Testing if the add button will add a task to the home screen
   testWidgets('Add button functionality test', (WidgetTester tester) async {
-    //Find the add button and tap it
-    await tester.tap(find.byIcon(Icons.note_add));
+    const todoWidget = TodoContainer(title: "Test");
+    
+    await tester.pumpWidget(MyApp());
 
+    //Find the add button and tap it
+    await tester.tap(find.byType(FloatingActionButton));
+
+    await tester.pump();
     //Checks if the new todo task is created and present 
-    expect(find.widgetWithText(TodoContainer, "Test test"), findsOneWidget);
+    expect(find.text("Test"), findsOneWidget);
   });
 }

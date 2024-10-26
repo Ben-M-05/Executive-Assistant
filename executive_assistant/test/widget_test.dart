@@ -16,7 +16,7 @@ void main() {
   testWidgets('Add button functionality test', (WidgetTester tester) async {
     const todoWidget = TodoContainer(title: "Test");
     
-    await tester.pumpWidget(MyApp());
+    await tester.pumpWidget(const MyApp());
 
     //Find the add button and tap it
     await tester.tap(find.byType(FloatingActionButton));
@@ -25,4 +25,6 @@ void main() {
     //Checks if the new todo task is created and present 
     expect(find.text("Test"), findsOneWidget);
   });
+
+  
 }

@@ -4,8 +4,14 @@ import 'package:executive_assistant/widgets/todo_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:executive_assistant/widgets/todo_container.dart';
 import 'package:provider/provider.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MyApp());
 }
 
@@ -23,7 +29,7 @@ class MyApp extends StatelessWidget {
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           useMaterial3: true,
         ),
-        home: MyHomePage(title: 'Todo App'),
+        home: const MyHomePage(title: 'Todo App'),
       ),
     );
   }
@@ -77,22 +83,14 @@ class _MyHomePageState extends State<MyHomePage> {
         // Center is a layout widget. It takes a single child and positions it
         // in the middle of the parent.
         child: ListView.separated(
-          padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
+          padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
 
           itemCount: tasks.length,
           itemBuilder: (context, index) {
             final task = tasks[index];
-            return ListTile(
-              shape: RoundedRectangleBorder(
-                side: BorderSide(color: const Color.fromARGB(255, 102, 99, 99), width: 1),
-                borderRadius: BorderRadius.circular(5)
-              ),
-              contentPadding: EdgeInsets.fromLTRB(40, 0, 0, 0),
-              title: Text(task.title, style: TextStyle(color: Colors.white)),
-              tileColor: const Color.fromARGB(255, 97, 92, 92),
-            );          
+            return TodoContainer(title: task.title);          
           },
-          separatorBuilder: (context, index) => SizedBox(
+          separatorBuilder: (context, index) => const SizedBox(
             height: 10,
           ),
         ) 
@@ -104,11 +102,11 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Container(
           width: 60,
           height: 60,
-          child: const Icon(Icons.note_add, color: Color.fromARGB(255, 255, 255, 255)),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(12),
-            gradient: LinearGradient(colors: [const Color.fromARGB(255, 24, 18, 18), const Color.fromARGB(255, 36, 30, 30), Color.fromARGB(255, 0, 0, 0), const Color.fromARGB(255, 93, 44, 23), Colors.red])
+            gradient: const LinearGradient(colors: [Color.fromARGB(255, 24, 18, 18), Color.fromARGB(255, 36, 30, 30), Color.fromARGB(255, 0, 0, 0), Color.fromARGB(255, 93, 44, 23), Colors.red])
           ),
+          child: const Icon(Icons.note_add, color: Color.fromARGB(255, 255, 255, 255)),
         ),
         
       ), // This trailing comma makes auto-formatting nicer for build methods.

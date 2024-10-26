@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../api/todoMethods.dart';
+
 
 ///
 ///A container component that displays data of a Todo object
@@ -41,6 +43,7 @@ class _TodoContainerState extends State<TodoContainer> {
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
                   widget.title,
+                  style: const TextStyle(color: Colors.white)
                 ),
               ),
             )

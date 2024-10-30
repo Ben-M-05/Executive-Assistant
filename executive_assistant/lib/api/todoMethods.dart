@@ -1,7 +1,5 @@
 import 'package:executive_assistant/models/_todo_data_container.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'dart:io';
 
 class TodoMethodsBase {
   late TodoDataContainer todoDataContainer;
@@ -15,7 +13,7 @@ class TodoMethodsBase {
 
   Future<DocumentReference> addTodo(TodoDataContainer task) {
     return FirebaseFirestore.instance.collection('tasks').add(<String, dynamic>{
-      "task": TodoDataContainer,
+      "task": "Hello",
       "timestamp": DateTime.now().millisecondsSinceEpoch,
     });
   }

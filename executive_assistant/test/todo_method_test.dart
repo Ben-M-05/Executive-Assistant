@@ -1,10 +1,17 @@
 import 'package:executive_assistant/models/_todo_data_container.dart';
 import 'package:executive_assistant/api/todoMethods.dart';
 import 'package:test/test.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'mock.dart';
 
 void main() {
+
+  setupFirebaseAuthMocks();
+
+  setUpAll(() async {
+    await Firebase.initializeApp();
+  });
+  
   test('TodoMethodBase initialization should enable access to TodoDataContainer properties', () {
 
     final todoMethodsBase = TodoMethodsBase(TodoDataContainer("Test", "test", 0, false, ""));

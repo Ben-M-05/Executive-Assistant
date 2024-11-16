@@ -7,20 +7,48 @@ class TodoMethodsBase {
   TodoMethodsBase(TodoDataContainer todoDataContainer) {
     this.todoDataContainer = todoDataContainer;
 
-    addTodo(this.todoDataContainer);
+    addTodo();
 
   }
 
-  Future<DocumentReference> addTodo(TodoDataContainer task) {
+  Future<DocumentReference> addTodo() {
+    var (title, description, status, isCompleted, author) = this.todoDataContainer.toJson();
+
     return FirebaseFirestore.instance.collection('tasks').add(<String, dynamic>{
-      "task": "Hello",
+      "task": {
+        "Title": title,
+        "Description": description,
+        "priority": status,
+        "isCompleted": isCompleted,
+        "author": author
+      },
       "timestamp": DateTime.now().millisecondsSinceEpoch,
     });
   }
   
+  List getAll() {
+    var _tasksList = [];
+    FirebaseFirestore.instance.collection('tasks').orderBy('timestamp', descending: true).snapshots().listen((snapshot) {
+
+      for(final document in snapshot.docs) {
+        _tasksList.add(
+          TodoDataContainer(
+            document.data()['title'] as String,
+            document.data()['description'] as String,
+            document.data()['itemPriority'] as int,
+            document.data()['isCompleted'] as bool,
+            document.data()['author'] as String
+         ));
+      }
+      
+    });
+
+    return _tasksList;
+
+  }
 
   String getTitle() {
-    return todoDataContainer.title;
+    return "";
   }
 
   void setTitle(String newTitle) {

@@ -20,9 +20,6 @@ void main() {
   });
 
   test('TodoMethodBase method setTitle() should set the title of created task from test to hello', () async {
-    
-    await Firebase.initializeApp();
-    
     final todoExample = TodoDataContainer("Test", "test", 0, false, "");
 
     final todoMethodsBase = TodoMethodsBase(todoExample);

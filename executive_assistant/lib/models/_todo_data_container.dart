@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 ///**_TodoDataContainer**
 ///
 ///*Data container for a todo task item*
@@ -18,10 +20,21 @@ class TodoDataContainer {
   String description;
   int itemPriority;
   bool isCompleted;
-  String? author;
+  String author;
 
   //Default Constructor
   TodoDataContainer(this.title, this.description, this.itemPriority, this.isCompleted, this.author);
+
+  //Returns the object in JSON format for better database indexing
+  (String, String, int, bool, String) toJson() {
+    return (
+      title,
+      description,
+      itemPriority,
+      isCompleted,
+      author,
+    );
+  }
 
 }
 
